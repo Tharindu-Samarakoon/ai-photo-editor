@@ -6,9 +6,10 @@ import { cn } from '@/lib/utils';
 import { useImageStore } from '@/lib/image-store';
 import { useLayerStore } from '@/lib/layerStore';
 import Lottie from 'lottie-react';
-import ImageAnimation from '@/public/photoAnimation.json'
+import VideoAnimation from '@/public/videoAnimation.json'
+import { uploadVideo } from '@/server/UploadVideo';
 
-const UploadImage = () => {
+const UploadVideo = () => {
 
     const setGenerating = useImageStore((state) => state.setGenerating);
     const activeLayer = useLayerStore((state) => state.activeLayer);
@@ -18,38 +19,27 @@ const UploadImage = () => {
     const {getRootProps, getInputProps, isDragActive} = useDropzone({
         maxFiles: 1,
         accept: {
-            'iamge/png': ['.png'],
-            'iamge/jpg': ['.jpg'],
-            'iamge/webp': ['.webp'],
-            'iamge/jpeg': ['.jpeg'],
+            'video/mp4': ['.mp4'],
         },
         onDrop: async (acceptedFiles, fileRejections) => {
             if(acceptedFiles.length) {
                 const formData = new FormData();
-                formData.append("image", acceptedFiles[0]);
-                const objectUrl = URL.createObjectURL(acceptedFiles[0]);
+                formData.append("video", acceptedFiles[0]);
                 
                 //TODO: state management layer, active layers etc.
                 setGenerating(true);
 
-                updateLayer({
-                    id: activeLayer.id,
-                    url: objectUrl,
-                    width: 0,
-                    height: 0,
-                    name: 'uploading',
-                    publicId: "",
-                    format: "",
-                    resourceType: "image",
-                })
+
 
                 setActiveLayer(activeLayer.id);
 
-                const res = await uploadImage({image: formData});
+                const res = await uploadVideo({video: formData});
                 console.log(res);
                 
 
                 if(res?.data?.success){
+                    const videoUrl = res.data.success.url;
+                    const thunbnail = videoUrl.replace(/\.[^/.]+$/, ".jpg")
                     updateLayer({
                         id: activeLayer.id,
                         url: res.data.success.url,
@@ -58,6 +48,7 @@ const UploadImage = () => {
                         name: res.data.success.name,
                         publicId: res.data.success.public_id,
                         format: res.data.success.format,
+                        poster: thunbnail,
                         resourceType: res.data.success.resource_type
                     })
                     setActiveLayer(activeLayer.id);
@@ -80,14 +71,14 @@ if(!activeLayer.url)
         <CardContent className="flex flex-col h-full items-center justify-center px-2 py-24 text-xs">
             <input {...getRootProps()} type='text'/>
             <div className="flex items-center flex-col justify-center gap-2">
-                <Lottie className='h-32' animationData={ImageAnimation} />
+                <Lottie className='h-32' animationData={VideoAnimation} />
                 <h1>Cool Animation</h1>
-                <p className='text-muted-foreground text-2xl'>{isDragActive? "Drop Your Image Here" : "Start by Uploading an Image"}</p>
-                <p className='text-muted-foreground'>Supported formats .jpg .png .jpeg .webp</p>
+                <p className='text-muted-foreground text-2xl'>{isDragActive? "Drop Your Video Here" : "Start by Uploading an Video"}</p>
+                <p className='text-muted-foreground'>Supported formats .mp4</p>
             </div>
         </CardContent>
     </Card>
   )
 }
 
-export default UploadImage
+export default UploadVideo

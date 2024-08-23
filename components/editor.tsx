@@ -6,6 +6,8 @@ import ActiveImage from './ActiveImage'
 import UploadForm from './upload/uploadForm'
 import { useLayerStore } from '@/lib/layerStore'
 import ImageToolbar from './toolbar/ImageToolbar'
+import LoadingScreen from './LoadingScreen'
+import VideoToolBar from './toolbar/video-toolbar'
 
 const Editor = () => {
 
@@ -19,8 +21,10 @@ const Editor = () => {
             </div>
             <div className="flex flex-col gap-4">
               {activeLayer.resourceType === 'image'&& <ImageToolbar/>}
+              {activeLayer.resourceType === 'video'&& <VideoToolBar/>}
             </div>
         </div>
+        <LoadingScreen/>
         <UploadForm/>
         <ActiveImage/>
         <Layers/>

@@ -3,14 +3,17 @@ import { Layer, useLayerStore } from '@/lib/layerStore';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React from 'react'
+import ImageComparison from './layers/image-comparison';
 
 const ActiveImage = () => {
   
     const generating = useImageStore((state) => state.generating);
     const activeLayer = useLayerStore((state) => state.activeLayer);
     const layers = useLayerStore((state) => state.layers);
+    const comparisonMode = useLayerStore((state) => state.layerComparisonMode)
+    const comparedLayers = useLayerStore((state) => state.comparedLayers);
 
-    if(!activeLayer.url) return null;
+    if(!activeLayer.url && comparedLayers.length === 0) return null;
     console.log(activeLayer);
     
 
@@ -34,6 +37,20 @@ const ActiveImage = () => {
                 )}
         </div>
     )
+
+    if(comparisonMode && comparedLayers.length > 0) {
+        console.log("In comparison mode");
+        
+        const comparisonLayers = comparedLayers
+        .map((id) => layers.find((i) => i.id === id))
+        .filter(Boolean) as Layer[];
+
+        return (
+            <div className="w-full h-full relative h-svh p-24 bg-secondary flex flex-col items-center justify-center">
+                <ImageComparison layers={comparisonLayers}/>
+            </div>
+        )
+    }
 
     return (
         <div className="w-full relative h-svh p-24 bg-secondary flex flex-col items-center justify-center">
