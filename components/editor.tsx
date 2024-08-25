@@ -8,6 +8,7 @@ import { useLayerStore } from '@/lib/layerStore'
 import ImageToolbar from './toolbar/ImageToolbar'
 import LoadingScreen from './LoadingScreen'
 import VideoToolBar from './toolbar/video-toolbar'
+import Export from './toolbar/Expot'
 
 const Editor = () => {
 
@@ -22,6 +23,7 @@ const Editor = () => {
             <div className="flex flex-col gap-4">
               {activeLayer.resourceType === 'image'&& <ImageToolbar/>}
               {activeLayer.resourceType === 'video'&& <VideoToolBar/>}
+              <Export resource={activeLayer.resourceType!} />
             </div>
         </div>
         <LoadingScreen/>
