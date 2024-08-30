@@ -50,12 +50,6 @@ This web application enables users to edit photos and videos with advanced AI-dr
     An awesome photo and video editor to demonstrate the power of AI when made available in a user friendly manner
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
-  </p>
 </div>
 
 ## About The Project
